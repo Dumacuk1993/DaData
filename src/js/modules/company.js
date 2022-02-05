@@ -1,6 +1,8 @@
-window.addEventListener("DOMContentLoaded", function () {
+import { getCompany } from '../services/service'
+
+function company() {
     const url ="https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party";
-    const token = "b02e79ac1cbd39cc50ad77cd549e81959705b13a";
+
     const nameShort = document.querySelector("#name_short"),
       nameFull = document.querySelector("#name_full"),
       innResult = document.querySelector("#inn_kpp"),
@@ -36,31 +38,14 @@ window.addEventListener("DOMContentLoaded", function () {
       });
     }
   
-    const getCompani = async (url, query) => {
-      let result = await fetch(url, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Token " + token,
-        },
-        body: JSON.stringify({ query: query }),
-      });
-  
-      if (!result.ok) {
-        throw new Error(`Could not fetch ${url}, status: ${result.status}`);
-      }
-  
-      return await result.json();
-    };
+
   
     input.addEventListener("input", (e) => {
       while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
       }
   
-      getCompani(url, e.target.value).then((data) => {
+      getCompany(url, e.target.value).then((data) => {
         const lable =
           data.suggestions.length === 0
             ? `<p class="list_lable">Неизвестная организация</p>`
@@ -81,4 +66,6 @@ window.addEventListener("DOMContentLoaded", function () {
         });
       });
     });
-  });
+}
+
+export default company;
